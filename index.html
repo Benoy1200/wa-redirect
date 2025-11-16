@@ -41,21 +41,69 @@
             100% { transform: rotate(360deg); }
         }
     </style>
+
+    <!-- TikTok Pixel Code Start -->
+    <script>
+!function (w, d, t) {
+  w.TiktokAnalyticsObject = t;
+  var ttq = w[t] = w[t] || [];
+  ttq.methods = [
+    "page","track","identify","instances","debug","on","off","once","ready",
+    "alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"
+  ];
+  ttq.setAndDefer = function (t, e) {
+    t[e] = function () {
+      t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+    };
+  };
+  for (var i = 0; i < ttq.methods.length; i++) {
+    ttq.setAndDefer(ttq, ttq.methods[i]);
+  }
+  ttq.instance = function (t) {
+    var e = ttq._i[t] || [];
+    for (var n = 0; n < ttq.methods.length; n++) {
+      ttq.setAndDefer(e, ttq.methods[n]);
+    }
+    return e;
+  };
+  ttq.load = function (e, n) {
+    var r = "https://analytics.tiktok.com/i18n/pixel/events.js",
+        o = n && n.partner;
+    ttq._i = ttq._i || {};
+    ttq._i[e] = [];
+    ttq._i[e]._u = r;
+    ttq._t = ttq._t || {};
+    ttq._t[e] = +new Date;
+    ttq._o = ttq._o || {};
+    ttq._o[e] = n || {};
+    n = d.createElement("script");
+    n.type = "text/javascript";
+    n.async = !0;
+    n.src = r + "?sdkid=" + e + "&lib=" + t;
+    e = d.getElementsByTagName("script")[0];
+    e.parentNode.insertBefore(n, e);
+  };
+
+  ttq.load('D4CRMPBC77UD6NKP7IF0');
+  ttq.page();
+}(window, document, 'ttq');
+    </script>
+    <!-- TikTok Pixel Code End -->
 </head>
+
 <body>
     <div class="container">
         <p style="font-size: 1.2em; font-weight: 500;">Redirecting to WhatsApp...</p>
         <div class="spinner"></div>
         <p>If WhatsApp does not open automatically in 3 seconds,<br>please tap the number below to contact us:</p>
         
-        <div class="phone">+86 131-6091-1413</div>
+        <div class="phone">+86 138-2210-2050</div>
     </div>
 
     <script>
         (function() {
-            // 【重要】我作为 AI 没有电话号码。
-            // 请在这里的引号内，换成你自己的、带国家码的、已开通 WhatsApp 的【真实号码】
-            var phoneNumber = "8613160911413"; 
+            // 【重要】请换成你自己的已开通 WhatsApp 的真实号码（带国家码，不要加 + 号）
+            var phoneNumber = "8613822102050"; 
             
             var redirectUrl = "https://wa.me/" + phoneNumber;
 
