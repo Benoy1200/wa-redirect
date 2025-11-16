@@ -107,6 +107,11 @@
             
             var redirectUrl = "https://wa.me/" + phoneNumber;
 
+            // 在跳转前给 TikTok 发一个「联系」事件
+        if (window.ttq && typeof window.ttq.track === 'function') {
+            ttq.track('Contact');
+        }
+
             // 3 秒后执行跳转
             setTimeout(function() {
                 window.location.href = redirectUrl;
