@@ -65,13 +65,9 @@
             // 如果是移动设备，使用 whatsapp:// 协议
             var redirectUrl = isMobile ? mobileUrl : webUrl;
 
-            // 如果 TikTok Pixel 被加载，发送联系事件
-            if (window.ttq && typeof window.ttq.track === 'function') {
-                ttq.track('Contact');
-            }
-
             // 1 秒后执行跳转到 WhatsApp
             setTimeout(function() {
+                // 自动跳转
                 window.location.href = redirectUrl;
             }, 1000); // 设置跳转延迟时间为 1 秒
 
