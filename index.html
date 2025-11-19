@@ -54,16 +54,9 @@
 
     <script>
         (function() {
-           // 设置 WhatsApp 电话号码
-            var phoneNumber = "8613822102050"; // 不需要加 + 号
-            var mobileUrl = "whatsapp://send?phone=" + phoneNumber;  // 移动端直接唤起 WhatsApp
-            var webUrl = "https://wa.me/" + phoneNumber;  // 备用的 Web 链接
-
-            // 检测设备类型
-            var isMobile = /iphone|ipod|android/i.test(navigator.userAgent.toLowerCase());
-
-            // 如果是移动设备，使用 whatsapp:// 协议
-            var redirectUrl = isMobile ? mobileUrl : webUrl;
+            // 设置 WhatsApp 电话号码
+            var phoneNumber = "861322102050"; // 不需要加 + 号
+            var redirectUrl = "https://wa.me/" + phoneNumber;  // 使用通用链接
 
             // 如果 TikTok Pixel 被加载，发送联系事件
             if (window.ttq && typeof window.ttq.track === 'function') {
