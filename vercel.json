@@ -1,5 +1,9 @@
 {
-  "rewrites": [
-    { "source": "/wa", "destination": "/index.html" }
+  "redirects": [
+    {
+      "source": "/wa",
+      "destination": "whatsapp://send?phone=+8613822212090",
+      "permanent": true
+    }
   ]
 }
