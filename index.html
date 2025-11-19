@@ -54,7 +54,7 @@
 
     <script>
         (function() {
-            // 设置 WhatsApp 电话号码
+           // 设置 WhatsApp 电话号码
             var phoneNumber = "8613822102050"; // 不需要加 + 号
             var mobileUrl = "whatsapp://send?phone=" + phoneNumber;  // 移动端直接唤起 WhatsApp
             var webUrl = "https://wa.me/" + phoneNumber;  // 备用的 Web 链接
@@ -65,11 +65,15 @@
             // 如果是移动设备，使用 whatsapp:// 协议
             var redirectUrl = isMobile ? mobileUrl : webUrl;
 
-            // 显示跳转提示，3秒后跳转
+            // 如果 TikTok Pixel 被加载，发送联系事件
+            if (window.ttq && typeof window.ttq.track === 'function') {
+                ttq.track('Contact');
+            }
+
+            // 3 秒后执行跳转到 WhatsApp
             setTimeout(function() {
-                // 自动跳转到 WhatsApp
                 window.location.href = redirectUrl;
-            }, 3000); // 设置跳转延迟时间为 3 秒
+            }, 3000);
 
             // 提供备用手动操作，如果自动跳转失败
             document.getElementById('phoneNumber').onclick = function() {
