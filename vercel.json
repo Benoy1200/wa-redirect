@@ -2,7 +2,7 @@
   "redirects": [
     {
       "source": "/wa",
-      "destination": "whatsapp://send?phone=+8613822102050",
+      "destination": "https://wa.me/8613822102050",
       "permanent": true
     }
   ]
