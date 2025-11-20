@@ -13,6 +13,7 @@
             text-align: center; 
             background-color: #f4f4f5;
             color: #333;
+            margin: 0;
         }
         .container { 
             padding: 30px; 
@@ -20,12 +21,20 @@
             border: 1px solid #ddd; 
             border-radius: 12px; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            max-width: 360px;
         }
-        .phone { 
-            font-size: 1.5em; 
-            font-weight: bold; 
-            margin: 15px 0; 
-            color: #0056b3;
+        .title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .phone-text {
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 16px;
+        }
+        .highlight-number {
+            font-weight: 600;
         }
         .spinner {
             border: 4px solid #f3f3f3;
@@ -34,11 +43,42 @@
             width: 30px;
             height: 30px;
             animation: spin 1s linear infinite;
-            margin: 20px auto;
+            margin: 16px auto 20px auto;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        .tip-text {
+            font-size: 0.95em;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+        .wa-button {
+            display: inline-block;
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 999px;
+            border: none;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            background-color: #25D366; /* WhatsApp 绿 */
+            color: #ffffff;
+            box-shadow: 0 3px 8px rgba(37, 211, 102, 0.3);
+            transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, background-color 0.1s ease-out;
+        }
+        .wa-button:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 4px rgba(37, 211, 102, 0.4);
+            background-color: #1ebe5a;
+        }
+        .note {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 14px;
+            line-height: 1.4;
         }
     </style>
 
@@ -93,34 +133,69 @@
 
 <body>
     <div class="container">
-        <p style="font-size: 1.2em; font-weight: 500;">Redirecting to WhatsApp...</p>
+        <p class="title">Opening WhatsApp chat...</p>
         <div class="spinner"></div>
-        <p>If WhatsApp does not open automatically in 3 seconds,<br>please tap the number below to contact us:</p>
+        <p class="tip-text">
+            If WhatsApp doesn’t open automatically in a few seconds,<br>
+            tap the button below to start chat.
+        </p>
 
-        <div class="phone" id="phoneNumber">+86 138-2210-2050</div>
+        <button class="wa-button" id="waButton">
+            Chat on WhatsApp
+        </button>
+
+        <p class="note">
+            If you see the app store or a browser page instead of chat,<br>
+            please open WhatsApp and message our number:<br>
+            <span class="highlight-number">+86 138-2210-2050</span>
+        </p>
     </div>
 
     <script>
-        (function() {
-            // 设置 WhatsApp 电话号码
-            var phoneNumber = "8613822102050"; // 使用正确的号码（不加 + 号）
-            var redirectUrl = "https://wa.me/" + phoneNumber; // 备用的 Web 链接
+      (function() {
+        // 1. WhatsApp 号码：国家码 + 手机号，不要加 + 和空格
+        // 按你现在展示的 +86 138-2210-2050 来写：
+        var phoneNumber = "8613822102050";
 
-            // 在跳转前给 TikTok 发一个「联系」事件
-            if (window.ttq && typeof window.ttq.track === 'function') {
-                ttq.track('Contact');
+        // 2. 预填消息（可自行修改文案）
+        var prefill = "Hi, I saw your TikTok about store design. My shop type is ____ and size is ____ sq ft.";
+        var encodedText = encodeURIComponent(prefill);
+
+        // 3. APP 深链接 & Web 链接
+        var waAppUrl = "whatsapp://send?phone=" + phoneNumber + "&text=" + encodedText;
+        var waWebUrl = "https://wa.me/" + phoneNumber + "?text=" + encodedText;
+
+        // 4. 判断是否是移动设备
+        var isMobile = /iphone|ipod|ipad|android/i.test(navigator.userAgent.toLowerCase());
+
+        // 5. 在跳转前给 TikTok 发一个 Contact 事件
+        if (window.ttq && typeof window.ttq.track === "function") {
+          ttq.track("Contact");
+        }
+
+        // 6. 3 秒后自动尝试跳转
+        setTimeout(function() {
+          if (isMobile) {
+            // 移动端优先尝试直接唤起 APP
+            window.location.href = waAppUrl;
+          } else {
+            // 桌面用 Web 版
+            window.location.href = waWebUrl;
+          }
+        }, 3000);
+
+        // 7. 用户点击按钮时，再次尝试（用户主动行为，成功率最高）
+        var btn = document.getElementById("waButton");
+        if (btn) {
+          btn.addEventListener("click", function() {
+            if (isMobile) {
+              window.location.href = waAppUrl;
+            } else {
+              window.location.href = waWebUrl;
             }
-
-            // 3 秒后执行跳转
-            setTimeout(function() {
-                window.location.href = redirectUrl;
-            }, 3000);  // 设置跳转延迟时间为 3 秒
-
-            // 提供备用手动操作，如果自动跳转失败
-            document.getElementById('phoneNumber').onclick = function() {
-                window.location.href = redirectUrl;
-            };
-        })();
+          });
+        }
+      })();
     </script>
 </body>
 </html>
