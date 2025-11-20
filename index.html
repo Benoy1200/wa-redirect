@@ -28,14 +28,6 @@
             font-weight: 600;
             margin-bottom: 10px;
         }
-        .phone-text {
-            font-size: 0.9em;
-            color: #555;
-            margin-top: 16px;
-        }
-        .highlight-number {
-            font-weight: 600;
-        }
         .spinner {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #3498db;
@@ -64,7 +56,7 @@
             font-size: 1em;
             font-weight: 600;
             cursor: pointer;
-            background-color: #25D366; /* WhatsApp 绿 */
+            background-color: #25D366; /* WhatsApp green */
             color: #ffffff;
             box-shadow: 0 3px 8px rgba(37, 211, 102, 0.3);
             transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, background-color 0.1s ease-out;
@@ -79,6 +71,9 @@
             color: #888;
             margin-top: 14px;
             line-height: 1.4;
+        }
+        .highlight-number {
+            font-weight: 600;
         }
     </style>
 
@@ -153,11 +148,10 @@
 
     <script>
       (function() {
-        // 1. WhatsApp 号码：国家码 + 手机号，不要加 + 和空格
-        // 按你现在展示的 +86 138-2210-2050 来写：
+        // 1. WhatsApp 号码：国家码 + 手机号（不要加 + 和空格）
         var phoneNumber = "8613822102050";
 
-        // 2. 预填消息（可自行修改文案）
+        // 2. 预填消息内容
         var prefill = "Hi, I saw your TikTok about store design. My shop type is ____ and size is ____ sq ft.";
         var encodedText = encodeURIComponent(prefill);
 
@@ -165,32 +159,38 @@
         var waAppUrl = "whatsapp://send?phone=" + phoneNumber + "&text=" + encodedText;
         var waWebUrl = "https://wa.me/" + phoneNumber + "?text=" + encodedText;
 
-        // 4. 判断是否是移动设备
+        // 4. 判断是否为移动设备
         var isMobile = /iphone|ipod|ipad|android/i.test(navigator.userAgent.toLowerCase());
 
-        // 5. 在跳转前给 TikTok 发一个 Contact 事件
+        // 5. TikTok Contact 事件
         if (window.ttq && typeof window.ttq.track === "function") {
           ttq.track("Contact");
         }
 
-        // 6. 3 秒后自动尝试跳转
+        // 6. 自动跳转：统一使用 Web 链接（手机 & 电脑都先走官方网页，再由 WhatsApp 自己拉起 App）
         setTimeout(function() {
-          if (isMobile) {
-            // 移动端优先尝试直接唤起 APP
-            window.location.href = waAppUrl;
-          } else {
-            // 桌面用 Web 版
-            window.location.href = waWebUrl;
-          }
+          window.location.href = waWebUrl;
         }, 3000);
 
-        // 7. 用户点击按钮时，再次尝试（用户主动行为，成功率最高）
+        // 7. 点击按钮：移动端 = 先试 APP 深链，再兜底 Web；桌面 = 直接 Web
         var btn = document.getElementById("waButton");
         if (btn) {
           btn.addEventListener("click", function() {
             if (isMobile) {
+              // 先尝试用 APP 深链
+              var opened = false;
+
+              // 尝试打开 App
               window.location.href = waAppUrl;
+
+              // 800–1200ms 后，如果还停在当前页面（大概率 App 没被唤起），兜底跳 Web 页
+              setTimeout(function() {
+                if (!document.hidden) { // 页面还在前台，说明没切到 App
+                  window.location.href = waWebUrl;
+                }
+              }, 1200);
             } else {
+              // 桌面：直接用 Web
               window.location.href = waWebUrl;
             }
           });
